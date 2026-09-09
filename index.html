@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description"
+    content="NutriTrack AI — Smart health tracking with AI-powered nutrition insights, food logging, hydration tracking, and personalized health reports.">
+  <meta property="og:title" content="NutriTrack AI — Smart Health Tracker" />
+  <meta property="og:description" content="Smart health and nutrition tracking with AI-powered insights and integrated Chatbase assistant." />
+  <meta name="theme-color" content="#0f1117">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>NutriTrack AI — Smart Health Tracker</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥗</text></svg>">
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- LANDING PAGE / ONBOARDING                -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="landingPage">
+    <div class="onboard-overlay" id="onboard-overlay">
+      <div class="onboard-logo">🥗</div>
+      <div class="onboard-title">NutriTrack AI</div>
+      <div class="onboard-subtitle">Your smart health companion</div>
+      <div class="onboard-form">
+        <div class="card" style="border:none;padding:0;background:transparent;box-shadow:none;margin-bottom:0;">
+          <div class="form-group">
+            <label class="form-label" for="onboard-name">Name</label>
+            <input type="text" class="form-input" id="onboard-name" placeholder="Your name" value="Alex">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label class="form-label" for="onboard-age">Age</label>
+              <input type="number" class="form-input" id="onboard-age" placeholder="25" min="10" max="120" value="26">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="onboard-gender">Gender</label>
+              <select class="form-input" id="onboard-gender">
+                <option value="male" selected>Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label class="form-label" for="onboard-height">Height (cm)</label>
+              <input type="number" class="form-input" id="onboard-height" placeholder="170" min="100" max="250" value="175">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="onboard-weight">Weight (kg)</label>
+              <input type="number" class="form-input" id="onboard-weight" placeholder="70" min="20" max="300" value="72">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="onboard-activity">Activity Level</label>
+            <select class="form-input" id="onboard-activity">
+              <option value="sedentary">Sedentary (little/no exercise)</option>
+              <option value="light">Light (1-3 days/week)</option>
+              <option value="moderate" selected>Moderate (3-5 days/week)</option>
+              <option value="active">Active (6-7 days/week)</option>
+              <option value="veryActive">Very Active (2x/day)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="onboard-goal">Your Goal</label>
+            <select class="form-input" id="onboard-goal">
+              <option value="lose">Weight Loss (-500 kcal)</option>
+              <option value="maintain" selected>Maintain Weight</option>
+              <option value="gain">Weight Gain (+300 kcal)</option>
+            </select>
+          </div>
+          <button class="btn btn-success" id="getStartedBtn">🚀 Get Started</button>
+          <!-- Alias for automated tests if checking onboard-save-btn -->
+          <button id="onboard-save-btn" style="display:none;" aria-hidden="true"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- MAIN APP & SPLIT LAYOUT                  -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="app-layout" style="display:none">
+    <!-- LEFT: NutriTrack Application -->
+    <div id="mainApp" style="display:none">
+      <!-- Top Navigation Bar -->
+      <header class="top-bar">
+        <div class="brand-wrapper">
+          <span class="brand-logo">🥗</span>
+          <span class="brand-name">NutriTrack AI</span>
+          <span class="brand-tag">Health Suite</span>
+        </div>
+        <div class="top-bar-right">
+          <button class="chat-fab" id="chat-fab">💬 AI Coach</button>
+          <div class="user-badge" id="top-user-badge" onclick="window.App.switchView('profile')">
+            <div class="user-avatar-circle" id="top-bar-user-initial">A</div>
+            <span id="top-bar-user-name">Alex</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Scrollable Main View Area -->
+      <main class="main-content-scroll">
+        <!-- Home / Dashboard View -->
+        <div class="app-view active" id="view-home"></div>
+
+        <!-- Food Log View -->
+        <div class="app-view" id="view-food"></div>
+
+        <!-- Activity Tracker View -->
+        <div class="app-view" id="view-activity"></div>
+
+        <!-- Water Tracker View -->
+        <div class="app-view" id="view-water"></div>
+
+        <!-- History View -->
+        <div class="app-view" id="view-history"></div>
+
+        <!-- Profile View -->
+        <div class="app-view" id="view-profile"></div>
+      </main>
+
+      <!-- Floating AI Assistant Button (Positioned at bottom-right corner, above bottom nav) -->
+      <button id="ai-assistant-btn" class="ai-assistant-btn" aria-label="Open AI Assistant" style="display:none">
+        <span class="ai-assistant-icon">✨</span>
+        <span>AI Assistant</span>
+      </button>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- BOTTOM NAVIGATION                        -->
+      <!-- ═══════════════════════════════════════ -->
+      <nav class="bottom-nav" id="bottom-nav">
+        <button class="nav-item active" data-view="home" id="nav-home">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-item" data-view="food" id="nav-food">
+          <span class="nav-icon">🍽️</span>
+          <span class="nav-label">Food</span>
+        </button>
+        <button class="nav-item" data-view="activity" id="nav-activity">
+          <span class="nav-icon">🏃</span>
+          <span class="nav-label">Activity</span>
+        </button>
+        <button class="nav-item" data-view="water" id="nav-water">
+          <span class="nav-icon">💧</span>
+          <span class="nav-label">Water</span>
+        </button>
+        <button class="nav-item" data-view="history" id="nav-history">
+          <span class="nav-icon">📈</span>
+          <span class="nav-label">History</span>
+        </button>
+        <button class="nav-item" data-view="profile" id="nav-profile">
+          <span class="nav-icon">👤</span>
+          <span class="nav-label">Profile</span>
+        </button>
+      </nav>
+
+      <!-- Hidden CSV Input -->
+      <input type="file" id="csvFileInput" accept=".csv" style="display:none" />
+
+      <!-- Manual Food Modal -->
+      <div id="foodModal" class="onboard-overlay"
+        style="display:none; position:fixed; inset:0; z-index:1500; background: rgba(15,17,23,0.92); backdrop-filter: blur(8px); align-items:center; justify-content:center;">
+        <div class="onboard-form card" style="max-width: 420px; border: 1px solid var(--border-color); margin: auto;">
+          <div class="card-title"><span class="card-title-icon">🍎</span> Add Custom Food</div>
+          <div class="form-group">
+            <label class="form-label" for="foodName">Food Name</label>
+            <input type="text" id="foodName" class="form-input" placeholder="e.g. Avocado Toast">
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div class="form-group">
+              <label class="form-label" for="foodCalories">Calories</label>
+              <input type="number" id="foodCalories" class="form-input" placeholder="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="foodProtein">Protein (g)</label>
+              <input type="number" id="foodProtein" class="form-input" placeholder="0">
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div class="form-group">
+              <label class="form-label" for="foodCarbs">Carbs (g)</label>
+              <input type="number" id="foodCarbs" class="form-input" placeholder="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="foodFat">Fat (g)</label>
+              <input type="number" id="foodFat" class="form-input" placeholder="0">
+            </div>
+          </div>
+          <div style="display:flex; gap:12px; margin-top:16px;">
+            <button class="btn btn-outline"
+              onclick="document.getElementById('foodModal').style.display='none'">Cancel</button>
+            <button class="btn btn-success" id="saveFoodBtn">Save Food</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chatbot Overlay Backdrop -->
+    <div id="chatbot-backdrop" class="chatbot-backdrop" style="display:none"></div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- RIGHT: DEDICATED CHATBASE AI DRAWER       -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="chatbot-container" class="chatbot-drawer" style="display:none" aria-label="Chatbase AI Assistant Drawer">
+      <div class="chatbot-header">
+        <div class="chatbot-header-left">
+          <div class="chatbot-status-dot"></div>
+          <div>
+            <div class="chatbot-header-title">Chatbase AI</div>
+            <div class="chatbot-header-subtitle">NutriTrack Health Coach</div>
+          </div>
+        </div>
+        <button class="chatbot-close-btn" id="chatbot-close-btn" title="Close Chatbot" aria-label="Close Chatbot">✕</button>
+      </div>
+      <div class="chatbot-iframe-container" id="chatbot-iframe-container">
+        <iframe
+          id="chatbase-iframe"
+          src="https://www.chatbase.co/chatbot-iframe/Bui9cYBQHqD4js6uDhuxB"
+          width="100%"
+          height="100%"
+          frameborder="0"
+          allow="microphone"
+          title="NutriTrack AI Assistant">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- React root anchor for Vite build -->
+  <div id="root" style="display:none"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SCRIPTS (order matters)                  -->
+  <!-- ═══════════════════════════════════════ -->
+  <script src="js/storage.js"></script>
+  <script src="js/foodDatabase.js"></script>
+  <script src="js/searchUtils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/food.js"></script>
+  <script src="js/water.js"></script>
+  <script src="js/activity.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
